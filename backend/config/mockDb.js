@@ -19,39 +19,59 @@ const writeJSON = (file, data) => {
   fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
 };
 
+class UserQueryChain {
+  constructor(result) {
+    this.result = result;
+  }
+
+  select(fields) {
+    if (!this.result) return this;
+    if (typeof fields === 'string') {
+      if (fields.includes('-password')) {
+        const { password, ...rest } = this.result;
+        this.result = rest;
+      }
+    }
+    return this;
+  }
+
+  then(resolve) {
+    resolve(this.result);
+  }
+}
+
 class MockUser {
-  static async findOne(query) {
+  static findOne(query) {
     const users = readJSON(USERS_FILE);
     const user = users.find(u => {
       if (query.email && u.email === query.email.toLowerCase()) return true;
       if (query.username && u.username === query.username) return true;
+      if (query._id && u._id === query._id.toString()) return true;
       return false;
     });
-    if (!user) return null;
-    return {
+    if (!user) return new UserQueryChain(null);
+    const userObj = {
       ...user,
       id: user._id,
       matchPassword: async function(enteredPassword) {
         return await bcrypt.compare(enteredPassword, this.password);
       }
     };
+    return new UserQueryChain(userObj);
   }
 
-  static async findById(id) {
+  static findById(id) {
     const users = readJSON(USERS_FILE);
     const user = users.find(u => u._id === id.toString());
-    if (!user) return null;
-    return {
+    if (!user) return new UserQueryChain(null);
+    const userObj = {
       ...user,
       id: user._id,
-      select: function(fields) {
-        if (fields.includes('-password')) {
-          const { password, ...rest } = this;
-          return rest;
-        }
-        return this;
+      matchPassword: async function(enteredPassword) {
+        return await bcrypt.compare(enteredPassword, this.password);
       }
     };
+    return new UserQueryChain(userObj);
   }
 
   static async create(data) {
@@ -122,13 +142,13 @@ class MockTask {
     });
   }
 
-  static async find(query) {
-    const filtered = this.filterTasks(query);
+  static find(query) {
+    const filtered = MockTask.filterTasks(query);
     return new TaskQueryChain(filtered);
   }
 
   static async countDocuments(query) {
-    const filtered = this.filterTasks(query);
+    const filtered = MockTask.filterTasks(query);
     return filtered.length;
   }
 
