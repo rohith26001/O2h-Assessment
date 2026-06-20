@@ -47,10 +47,12 @@ const MongooseUser = mongoose.model('User', UserSchema);
 
 const { MockUser } = require('../config/mockDb');
 
+const ALLOWED_MOCK_METHODS = ['findOne', 'findById', 'create', 'find', 'countDocuments'];
+
 // Export Proxy wrapper that directs to Mongoose or Mock database
 module.exports = new Proxy(MongooseUser, {
   get: function (target, prop) {
-    if (!global.mongoConnected) {
+    if (!global.mongoConnected && ALLOWED_MOCK_METHODS.includes(prop)) {
       return MockUser[prop];
     }
     return target[prop];
