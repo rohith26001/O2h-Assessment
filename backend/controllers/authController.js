@@ -99,8 +99,43 @@ const getMe = async (req, res) => {
   }
 };
 
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+
+const getDebug = async (req, res) => {
+  try {
+    const USERS_FILE = path.join(os.tmpdir(), 'o2h_users.json');
+    const TASKS_FILE = path.join(os.tmpdir(), 'o2h_tasks.json');
+    
+    let users = [];
+    let tasks = [];
+    
+    if (fs.existsSync(USERS_FILE)) {
+      users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+    }
+    if (fs.existsSync(TASKS_FILE)) {
+      tasks = JSON.parse(fs.readFileSync(TASKS_FILE, 'utf8'));
+    }
+    
+    return res.json({
+      success: true,
+      mongoConnected: global.mongoConnected,
+      usersCount: users.length,
+      tasksCount: tasks.length,
+      users: users.map(u => ({ _id: u._id, username: u.username, email: u.email })),
+      USERS_FILE,
+      TASKS_FILE,
+      env: process.env.NODE_ENV,
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+  getDebug,
 };
