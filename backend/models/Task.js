@@ -32,4 +32,16 @@ const TaskSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Task', TaskSchema);
+const MongooseTask = mongoose.model('Task', TaskSchema);
+
+const { MockTask } = require('../config/mockDb');
+
+// Export Proxy wrapper that directs to Mongoose or Mock database
+module.exports = new Proxy(MongooseTask, {
+  get: function (target, prop) {
+    if (!global.mongoConnected) {
+      return MockTask[prop];
+    }
+    return target[prop];
+  }
+});

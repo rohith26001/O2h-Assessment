@@ -9,6 +9,7 @@ const TEST_MONGO_URI = 'mongodb://127.0.0.1:27017/o2h-task-portal-test';
 beforeAll(async () => {
   // Connect to the test database
   await mongoose.connect(TEST_MONGO_URI);
+  global.mongoConnected = true;
 });
 
 afterAll(async () => {

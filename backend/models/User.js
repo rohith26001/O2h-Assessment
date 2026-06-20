@@ -43,4 +43,16 @@ UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = mongoose.model('User', UserSchema);
+const MongooseUser = mongoose.model('User', UserSchema);
+
+const { MockUser } = require('../config/mockDb');
+
+// Export Proxy wrapper that directs to Mongoose or Mock database
+module.exports = new Proxy(MongooseUser, {
+  get: function (target, prop) {
+    if (!global.mongoConnected) {
+      return MockUser[prop];
+    }
+    return target[prop];
+  }
+});
