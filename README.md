@@ -126,7 +126,7 @@ All request bodies are in JSON format. For protected routes, pass the authorizat
 ### Authentication Endpoints
 
 #### 1. Register User
-* **Endpoint**: `POST /api/auth/register`
+* **Endpoint**: `POST /auth/register`
 * **Access**: Public
 * **Request Body**:
   ```json
@@ -150,7 +150,7 @@ All request bodies are in JSON format. For protected routes, pass the authorizat
   ```
 
 #### 2. User Login
-* **Endpoint**: `POST /api/auth/login`
+* **Endpoint**: `POST /auth/login`
 * **Access**: Public
 * **Request Body**:
   ```json
@@ -173,7 +173,7 @@ All request bodies are in JSON format. For protected routes, pass the authorizat
   ```
 
 #### 3. Get Current User Profile
-* **Endpoint**: `GET /api/auth/me`
+* **Endpoint**: `GET /auth/me`
 * **Access**: Protected (JWT token required)
 * **Response (200 OK)**:
   ```json
@@ -193,7 +193,7 @@ All request bodies are in JSON format. For protected routes, pass the authorizat
 ### Task Endpoints
 
 #### 1. Get Tasks (Search, Filter, Sort, Paginate)
-* **Endpoint**: `GET /api/tasks`
+* **Endpoint**: `GET /tasks`
 * **Access**: Protected
 * **Query Parameters** (all optional):
   * `status`: Filter by status (`Pending`, `In Progress`, `Completed`, or `All`)
@@ -226,7 +226,7 @@ All request bodies are in JSON format. For protected routes, pass the authorizat
   ```
 
 #### 2. Get Task Stats
-* **Endpoint**: `GET /api/tasks/stats`
+* **Endpoint**: `GET /tasks/stats`
 * **Access**: Protected
 * **Response (200 OK)**:
   ```json
@@ -242,7 +242,7 @@ All request bodies are in JSON format. For protected routes, pass the authorizat
   ```
 
 #### 3. Create Task
-* **Endpoint**: `POST /api/tasks`
+* **Endpoint**: `POST /tasks`
 * **Access**: Protected
 * **Request Body**:
   ```json
@@ -268,7 +268,7 @@ All request bodies are in JSON format. For protected routes, pass the authorizat
   ```
 
 #### 4. Update Task Status
-* **Endpoint**: `PUT /api/tasks/:id`
+* **Endpoint**: `PUT /tasks/:id`
 * **Access**: Protected
 * **Request Body**:
   ```json
@@ -289,7 +289,7 @@ All request bodies are in JSON format. For protected routes, pass the authorizat
   ```
 
 #### 5. Delete Task
-* **Endpoint**: `DELETE /api/tasks/:id`
+* **Endpoint**: `DELETE /tasks/:id`
 * **Access**: Protected
 * **Response (200 OK)**:
   ```json

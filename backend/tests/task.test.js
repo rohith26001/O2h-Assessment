@@ -25,7 +25,7 @@ beforeEach(async () => {
 describe('Auth Endpoints', () => {
   it('should register a new user successfully', async () => {
     const res = await request(app)
-      .post('/api/auth/register')
+      .post('/auth/register')
       .send({
         username: 'testuser',
         email: 'test@example.com',
@@ -47,7 +47,7 @@ describe('Auth Endpoints', () => {
     });
 
     const res = await request(app)
-      .post('/api/auth/register')
+      .post('/auth/register')
       .send({
         username: 'testuser2',
         email: 'test@example.com',
@@ -66,7 +66,7 @@ describe('Auth Endpoints', () => {
     });
 
     const res = await request(app)
-      .post('/api/auth/login')
+      .post('/auth/login')
       .send({
         email: 'test@example.com',
         password: 'password123',
@@ -92,7 +92,7 @@ describe('Task Endpoints', () => {
 
     // Login to get token
     const res = await request(app)
-      .post('/api/auth/login')
+      .post('/auth/login')
       .send({
         email: 'task@example.com',
         password: 'password123',
@@ -102,7 +102,7 @@ describe('Task Endpoints', () => {
 
   it('should create a task successfully', async () => {
     const res = await request(app)
-      .post('/api/tasks')
+      .post('/tasks')
       .set('Authorization', `Bearer ${userToken}`)
       .send({
         title: 'Build Login Form',
@@ -118,7 +118,7 @@ describe('Task Endpoints', () => {
 
   it('should fail task creation if description is under 20 characters', async () => {
     const res = await request(app)
-      .post('/api/tasks')
+      .post('/tasks')
       .set('Authorization', `Bearer ${userToken}`)
       .send({
         title: 'Short Desc Task',
@@ -138,7 +138,7 @@ describe('Task Endpoints', () => {
     });
 
     const res = await request(app)
-      .get('/api/tasks')
+      .get('/tasks')
       .set('Authorization', `Bearer ${userToken}`);
 
     expect(res.statusCode).toEqual(200);
@@ -155,7 +155,7 @@ describe('Task Endpoints', () => {
     });
 
     const res = await request(app)
-      .put(`/api/tasks/${task._id}`)
+      .put(`/tasks/${task._id}`)
       .set('Authorization', `Bearer ${userToken}`)
       .send({
         status: 'Completed',
@@ -175,7 +175,7 @@ describe('Task Endpoints', () => {
     });
 
     const res = await request(app)
-      .delete(`/api/tasks/${task._id}`)
+      .delete(`/tasks/${task._id}`)
       .set('Authorization', `Bearer ${userToken}`);
 
     expect(res.statusCode).toEqual(200);
