@@ -17,10 +17,11 @@ services:
         generateValue: true
 
   # Frontend React Static Site
-  - type: static
+  - type: web
     name: o2h-task-frontend
+    runtime: static
     buildCommand: npm install && npm run build
-    publishDir: dist
+    staticPublishPath: dist
     rootDir: frontend
     envVars:
       - key: VITE_API_URL
