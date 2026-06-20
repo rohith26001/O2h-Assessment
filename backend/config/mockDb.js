@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const os = require('os');
 
-const USERS_FILE = path.join(__dirname, 'users.json');
-const TASKS_FILE = path.join(__dirname, 'tasks.json');
+const USERS_FILE = path.join(os.tmpdir(), 'o2h_users.json');
+const TASKS_FILE = path.join(os.tmpdir(), 'o2h_tasks.json');
 
 const readJSON = (file) => {
   if (!fs.existsSync(file)) return [];
