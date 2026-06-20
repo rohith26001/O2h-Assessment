@@ -22,14 +22,14 @@ app.use(express.json());
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/tasks', require('./routes/taskRoutes'));
 
-// Basic health check route
-app.get('/', (req, res) => {
-  return res.json({ success: true, message: 'o2h Task Management Portal API is running' });
-});
+// Serve frontend static files
+const path = require('path');
+const frontendDistPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendDistPath));
 
-// 404 Route handler
-app.use((req, res, next) => {
-  return res.status(404).json({ success: false, message: 'API route not found' });
+// Wildcard route to send index.html for React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendDistPath, 'index.html'));
 });
 
 // Global error handler

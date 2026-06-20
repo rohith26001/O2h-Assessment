@@ -1,12 +1,12 @@
 services:
-  # Backend Node.js Web Service
+  # Unified Web Service (Backend + Frontend together)
   - type: web
-    name: o2h-task-backend
+    name: o2h-task-portal
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: npm run build
     startCommand: npm start
-    rootDir: backend
+    rootDir: .
     envVars:
       - key: PORT
         value: 10000
@@ -15,17 +15,3 @@ services:
         placeholder: "Enter your MongoDB Atlas URI (e.g. mongodb+srv://...)"
       - key: JWT_SECRET
         generateValue: true
-
-  # Frontend React Static Site
-  - type: web
-    name: o2h-task-frontend
-    runtime: static
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
-    rootDir: frontend
-    envVars:
-      - key: VITE_API_URL
-        fromService:
-          name: o2h-task-backend
-          type: web
-          property: host
